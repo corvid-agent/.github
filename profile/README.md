@@ -6,15 +6,25 @@ We're an indie collective passionate about creating innovative applications, blo
 
 ## What We're Building
 
+### AlgoChat
+End-to-end encrypted messaging on Algorand with hybrid ECDH + PSK ratcheting. Multi-language implementations and a web client.
+
+→ [`protocol-algochat`](https://github.com/CorvidLabs/protocol-algochat) · [`swift-algochat`](https://github.com/CorvidLabs/swift-algochat) · [`ts-algochat`](https://github.com/CorvidLabs/ts-algochat) · [`kt-algochat`](https://github.com/CorvidLabs/kt-algochat) · [`rs-algochat`](https://github.com/CorvidLabs/rs-algochat) · [`py-algochat`](https://github.com/CorvidLabs/py-algochat) · [`algochat-web`](https://github.com/CorvidLabs/algochat-web)
+
+### AI Agents
+Autonomous AI software engineer powered by on-chain messaging — writes code, opens PRs, and ships features.
+
+→ [`corvid-agent`](https://github.com/CorvidLabs/corvid-agent)
+
 ### Algorand Blockchain
 We're all-in on Algorand. Our Swift SDK is the most complete toolchain for building on Algorand from Apple platforms — from core transactions to NFT minting.
 
-→ [`swift-algorand`](https://github.com/CorvidLabs/swift-algorand) · [`swift-algokit`](https://github.com/CorvidLabs/swift-algokit) · [`swift-mint`](https://github.com/CorvidLabs/swift-mint) · [`swift-arc`](https://github.com/CorvidLabs/swift-arc)
+→ [`swift-algorand`](https://github.com/CorvidLabs/swift-algorand) · [`swift-algokit`](https://github.com/CorvidLabs/swift-algokit) · [`swift-mint`](https://github.com/CorvidLabs/swift-mint) · [`swift-arc`](https://github.com/CorvidLabs/swift-arc) · [`NFTRemix`](https://github.com/CorvidLabs/NFTRemix)
 
 ### Open Source Libraries
 Focused, well-crafted packages that solve real problems:
 
-→ [`swift-retry`](https://github.com/CorvidLabs/swift-retry) · [`swift-qr`](https://github.com/CorvidLabs/swift-qr) · [`swift-env`](https://github.com/CorvidLabs/swift-env) · [`swift-graph`](https://github.com/CorvidLabs/swift-graph) · [`swift-color`](https://github.com/CorvidLabs/swift-color) · [`swift-music`](https://github.com/CorvidLabs/swift-music) · [and more...](https://github.com/orgs/CorvidLabs/repositories)
+→ [`swift-retry`](https://github.com/CorvidLabs/swift-retry) · [`swift-qr`](https://github.com/CorvidLabs/swift-qr) · [`swift-env`](https://github.com/CorvidLabs/swift-env) · [`swift-graph`](https://github.com/CorvidLabs/swift-graph) · [`swift-color`](https://github.com/CorvidLabs/swift-color) · [`swift-music`](https://github.com/CorvidLabs/swift-music) · [`swift-godot`](https://github.com/CorvidLabs/swift-godot) · [`swift-weather`](https://github.com/CorvidLabs/swift-weather) · [and more...](https://github.com/orgs/CorvidLabs/repositories)
 
 ### Education
 [`cs`](https://github.com/CorvidLabs/cs) — Interactive CS courses in Python, JavaScript, Swift, Rust, and Algorithms
@@ -24,6 +34,7 @@ Focused, well-crafted packages that solve real problems:
 - **Open Source** — Contributing robust, reusable tools back to the developer community
 - **Community-Driven** — Empowering our users to have a real voice in our roadmap
 - **Blockchain Native** — Building for the decentralized future on Algorand
+- **AI-Native** — Building autonomous developer agents with [corvid-agent](https://github.com/CorvidLabs/corvid-agent)
 
 ## Nevermore NFT
 
