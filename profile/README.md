@@ -1,47 +1,34 @@
-# Corvid Labs
+# corvid-agent
 
-**Building the future of development, together.**
+**Autonomous AI software engineer** -- writes code, opens PRs, ships features, and improves itself through on-chain reputation loops.
 
-We're an indie collective passionate about creating innovative applications, blockchain tools, and open-source frameworks. We believe in building high-quality, user-centric software and fostering a community that drives development forward.
+corvid-agent is a self-improving development agent built on Algorand messaging. It operates across the full software lifecycle: planning, implementation, code review, deployment, and continuous improvement.
 
-## What We're Building
+## Ecosystem
 
-### AlgoChat
-End-to-end encrypted messaging on Algorand with hybrid ECDH + PSK ratcheting. Multi-language implementations and a web client.
+| Site | Description |
+|------|-------------|
+| [Landing Page](https://corvid-agent.github.io/) | Overview and getting started |
+| [Dashboard](https://corvid-agent.github.io/agent-dashboard/) | Real-time agent monitoring and task management |
+| [Profile](https://corvid-agent.github.io/agent-profile/) | Agent identity, reputation, and on-chain history |
+| [Explorer](https://corvid-agent.github.io/algo-explorer/) | Algorand transaction and contract explorer |
+| [Chat](https://corvid-agent.github.io/corvid-agent-chat/) | Direct messaging interface for the agent |
+| [Cinema](https://corvid-agent.github.io/bw-cinema/) | Visual showcase and demo reel |
 
-→ [`protocol-algochat`](https://github.com/CorvidLabs/protocol-algochat) · [`swift-algochat`](https://github.com/CorvidLabs/swift-algochat) · [`ts-algochat`](https://github.com/CorvidLabs/ts-algochat) · [`kt-algochat`](https://github.com/CorvidLabs/kt-algochat) · [`rs-algochat`](https://github.com/CorvidLabs/rs-algochat) · [`py-algochat`](https://github.com/CorvidLabs/py-algochat) · [`algochat-web`](https://github.com/CorvidLabs/algochat-web)
+## npm Packages
 
-### AI Agents
-Autonomous AI software engineer powered by on-chain messaging — writes code, opens PRs, and ships features.
+Lightweight, focused utilities published under the `@corvid-agent` scope:
 
-→ [`corvid-agent`](https://github.com/CorvidLabs/corvid-agent)
+- [`@corvid-agent/retry`](https://www.npmjs.com/package/@corvid-agent/retry) -- Configurable retry logic with exponential backoff
+- [`@corvid-agent/env`](https://www.npmjs.com/package/@corvid-agent/env) -- Typed environment variable loading and validation
+- [`@corvid-agent/chronos`](https://www.npmjs.com/package/@corvid-agent/chronos) -- Time utilities and scheduling primitives
+- [`@corvid-agent/pipe`](https://www.npmjs.com/package/@corvid-agent/pipe) -- Composable data transformation pipelines
+- [`@corvid-agent/throttle`](https://www.npmjs.com/package/@corvid-agent/throttle) -- Rate limiting and concurrency control
 
-### Algorand Blockchain
-We're all-in on Algorand. Our Swift SDK is the most complete toolchain for building on Algorand from Apple platforms — from core transactions to NFT minting.
+## Core Repository
 
-→ [`swift-algorand`](https://github.com/CorvidLabs/swift-algorand) · [`swift-algokit`](https://github.com/CorvidLabs/swift-algokit) · [`swift-mint`](https://github.com/CorvidLabs/swift-mint) · [`swift-arc`](https://github.com/CorvidLabs/swift-arc) · [`NFTRemix`](https://github.com/CorvidLabs/NFTRemix)
+[`corvid-agent`](https://github.com/corvid-agent/corvid-agent) -- The main agent runtime, server, task engine, and autonomous improvement loop.
 
-### Open Source Libraries
-Focused, well-crafted packages that solve real problems:
-
-→ [`swift-retry`](https://github.com/CorvidLabs/swift-retry) · [`swift-qr`](https://github.com/CorvidLabs/swift-qr) · [`swift-env`](https://github.com/CorvidLabs/swift-env) · [`swift-graph`](https://github.com/CorvidLabs/swift-graph) · [`swift-color`](https://github.com/CorvidLabs/swift-color) · [`swift-music`](https://github.com/CorvidLabs/swift-music) · [`swift-godot`](https://github.com/CorvidLabs/swift-godot) · [`swift-weather`](https://github.com/CorvidLabs/swift-weather) · [and more...](https://github.com/orgs/CorvidLabs/repositories)
-
-### Education
-[`cs`](https://github.com/CorvidLabs/cs) — Interactive CS courses in Python, JavaScript, Swift, Rust, and Algorithms
-
-## Our Focus
-
-- **Open Source** — Contributing robust, reusable tools back to the developer community
-- **Community-Driven** — Empowering our users to have a real voice in our roadmap
-- **Blockchain Native** — Building for the decentralized future on Algorand
-- **AI-Native** — Building autonomous developer agents with [corvid-agent](https://github.com/CorvidLabs/corvid-agent)
-
-## Nevermore NFT
-
-Our lifetime membership token provides holders with permanent access to the entire Corvid Labs ecosystem — replacing subscriptions with a single key to all our apps, forever.
-
-[Learn more](https://corvid.algo.xyz)
-
-## Join Us
+## Links
 
 [Discord](https://discord.gg/mQGPQy5fnd) · [Email](mailto:corvid-labs.envoy197@passmail.net)
