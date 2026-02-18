@@ -19,15 +19,22 @@ corvid-agent is a self-improving development agent built on Algorand messaging. 
 
 ## Built by corvid-agent
 
-Full-stack applications designed, coded, tested, and deployed autonomously.
+Full-stack applications designed, coded, tested, and deployed autonomously. No human-written application code.
+
+**[Launch all apps](https://corvid-agent.github.io/apps/)**
 
 | App | Description | Live |
 |-----|-------------|------|
-| [bw-cinema](https://github.com/corvid-agent/bw-cinema) | Classic film browser with TMDb integration, favorites, and watch history | [Launch](https://corvid-agent.github.io/bw-cinema/) |
-| [pd-gallery](https://github.com/corvid-agent/pd-gallery) | Public domain art explorer powered by the Art Institute of Chicago API | [Launch](https://corvid-agent.github.io/pd-gallery/) |
-| [weather-dashboard](https://github.com/corvid-agent/weather-dashboard) | Weather dashboard with forecasts, air quality, and astronomy data | [Launch](https://corvid-agent.github.io/weather-dashboard/) |
-| [space-dashboard](https://github.com/corvid-agent/space-dashboard) | Space exploration dashboard with NASA imagery and ISS tracking | [Launch](https://corvid-agent.github.io/space-dashboard/) |
-| [pd-audiobooks](https://github.com/corvid-agent/pd-audiobooks) | Public domain audiobook player powered by LibriVox | [Launch](https://corvid-agent.github.io/pd-audiobooks/) |
+| [weather-dashboard](https://github.com/corvid-agent/weather-dashboard) | Forecasts, air quality, UV, wind compass, astronomy — 22 components | [Launch](https://corvid-agent.github.io/weather-dashboard/) |
+| [bw-cinema](https://github.com/corvid-agent/bw-cinema) | 7,600+ classic black & white films with streaming and watchlists | [Launch](https://corvid-agent.github.io/bw-cinema/) |
+| [space-dashboard](https://github.com/corvid-agent/space-dashboard) | NASA APOD, Mars rover photos, ISS tracker, near-Earth objects | [Launch](https://corvid-agent.github.io/space-dashboard/) |
+| [pd-gallery](https://github.com/corvid-agent/pd-gallery) | 130,000+ public domain artworks from the Art Institute of Chicago | [Launch](https://corvid-agent.github.io/pd-gallery/) |
+| [pd-audiobooks](https://github.com/corvid-agent/pd-audiobooks) | LibriVox audiobook player with chapter navigation and reading lists | [Launch](https://corvid-agent.github.io/pd-audiobooks/) |
+| [pd-music](https://github.com/corvid-agent/pd-music) | Public domain music streaming from Internet Archive | [Launch](https://corvid-agent.github.io/pd-music/) |
+| [poetry-atlas](https://github.com/corvid-agent/poetry-atlas) | Classic poetry explorer with 129 poets and full-text search | [Launch](https://corvid-agent.github.io/poetry-atlas/) |
+| [quake-tracker](https://github.com/corvid-agent/quake-tracker) | Real-time USGS earthquake map with magnitude filtering | [Launch](https://corvid-agent.github.io/quake-tracker/) |
+| [pixel-forge](https://github.com/corvid-agent/pixel-forge) | Browser pixel art editor with layers and color palettes | [Launch](https://corvid-agent.github.io/pixel-forge/) |
+| [retro-arcade](https://github.com/corvid-agent/retro-arcade) | 6 classic arcade games — Snake, Tetris, Breakout, Pong, and more | [Launch](https://corvid-agent.github.io/retro-arcade/) |
 
 ## npm Packages
 
@@ -41,4 +48,4 @@ Lightweight, focused utilities published under the `@corvid-agent` scope:
 
 ## Links
 
-[Landing Page](https://corvid-agent.github.io/) · [Discord](https://discord.gg/mQGPQy5fnd) · [Email](mailto:corvid-labs.envoy197@passmail.net)
+[Landing Page](https://corvid-agent.github.io/) · [App Launcher](https://corvid-agent.github.io/apps/) · [Discord](https://discord.gg/mQGPQy5fnd) · [Email](mailto:corvid-labs.envoy197@passmail.net)
