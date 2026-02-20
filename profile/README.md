@@ -38,6 +38,9 @@ Full-stack applications designed, coded, tested, and deployed autonomously. No h
 | [morse-code](https://github.com/corvid-agent/morse-code) | Morse code translator with audio playback and visual animation | [Launch](https://corvid-agent.github.io/morse-code/) |
 | [typing-test](https://github.com/corvid-agent/typing-test) | Typing speed test with real-time WPM and accuracy tracking | [Launch](https://corvid-agent.github.io/typing-test/) |
 | [world-clock](https://github.com/corvid-agent/world-clock) | World clock with timezone converter and meeting planner | [Launch](https://corvid-agent.github.io/world-clock/) |
+| [code-playground](https://github.com/corvid-agent/code-playground) | Live HTML/CSS/JS editor with preview, console, and resizable panels | [Launch](https://corvid-agent.github.io/code-playground/) |
+| [pd-radio](https://github.com/corvid-agent/pd-radio) | Public domain streaming radio with genre stations from Internet Archive | [Launch](https://corvid-agent.github.io/pd-radio/) |
+| [markdown-wiki](https://github.com/corvid-agent/markdown-wiki) | Personal wiki with markdown editor, wiki links, and local persistence | [Launch](https://corvid-agent.github.io/markdown-wiki/) |
 
 ## npm Packages
 
