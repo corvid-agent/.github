@@ -1,0 +1,143 @@
+name: Close Stale Issues
+
+on:
+  schedule:
+    # Run every Monday at 7:00 AM UTC
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ORG_NAME: corvid-agent
+  STALE_DAYS: 60
+  CLOSE_DAYS: 90
+  STALE_LABEL: stale
+  KEEP_OPEN_LABEL: keep-open
+
+jobs:
+  stale:
+    name: Label and close stale issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Process stale issues across org
+        run: |
+          now=$(date +%s)
+          stale_threshold=$((now - (STALE_DAYS * 86400)))
+          close_threshold=$((now - (CLOSE_DAYS * 86400)))
+
+          # List all non-archived repos in the org
+          repos=$(gh repo list "$ORG_NAME" --no-archived --json name -q '.[].name' --limit 200)
+
+          total_labeled=0
+          total_closed=0
+          summary=""
+
+          for repo in $repos; do
+            echo "Checking $ORG_NAME/$repo for stale issues..."
+
+            # Rate-limit guard
+            sleep 0.5
+
+            issues=$(gh issue list \
+              --repo "$ORG_NAME/$repo" \
+              --state open \
+              --json number,title,labels,updatedAt,url \
+              --limit 100 2>/dev/null || echo "[]")
+
+            issue_count=$(echo "$issues" | jq 'length')
+            if [ "$issue_count" -eq 0 ]; then
+              continue
+            fi
+
+            for i in $(seq 0 $((issue_count - 1))); do
+              issue=$(echo "$issues" | jq ".[$i]")
+              number=$(echo "$issue" | jq -r '.number')
+              title=$(echo "$issue" | jq -r '.title')
+              updated_at=$(echo "$issue" | jq -r '.updatedAt')
+              labels=$(echo "$issue" | jq -r '[.labels[].name] | join(",")')
+
+              # Skip issues with keep-open label
+              if echo "$labels" | grep -qi "$KEEP_OPEN_LABEL"; then
+                echo "  Skipping $ORG_NAME/$repo#$number (has $KEEP_OPEN_LABEL label)"
+                continue
+              fi
+
+              # Parse the last updated date
+              updated_epoch=$(date -d "$updated_at" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$updated_at" +%s 2>/dev/null || echo "0")
+              if [ "$updated_epoch" = "0" ]; then
+                echo "  Warning: could not parse date for $ORG_NAME/$repo#$number, skipping"
+                continue
+              fi
+
+              age_days=$(( (now - updated_epoch) / 86400 ))
+              has_stale=$(echo "$labels" | grep -ci "$STALE_LABEL" || true)
+
+              # Close issues with no activity for 90+ days
+              if [ "$updated_epoch" -lt "$close_threshold" ]; then
+                echo "  Closing $ORG_NAME/$repo#$number (inactive ${age_days}d): $title"
+
+                # Add stale label if not present
+                if [ "$has_stale" -eq 0 ]; then
+                  gh issue edit "$number" \
+                    --repo "$ORG_NAME/$repo" \
+                    --add-label "$STALE_LABEL" 2>/dev/null || true
+                fi
+
+                # Add closing comment
+                gh issue comment "$number" \
+                  --repo "$ORG_NAME/$repo" \
+                  --body "This issue has been automatically closed due to ${age_days} days of inactivity (threshold: ${CLOSE_DAYS} days).
+
+          If this issue is still relevant, please reopen it or add the \`${KEEP_OPEN_LABEL}\` label to prevent future auto-closing.
+
+          Thank you for your contribution!" 2>/dev/null || true
+
+                # Close the issue
+                gh issue close "$number" \
+                  --repo "$ORG_NAME/$repo" 2>/dev/null || echo "  Warning: could not close issue"
+
+                total_closed=$((total_closed + 1))
+                summary="$summary\n- CLOSED $ORG_NAME/$repo#$number (${age_days}d inactive): $title"
+
+                # Rate-limit guard
+                sleep 1
+
+              # Label issues with no activity for 60+ days as stale
+              elif [ "$updated_epoch" -lt "$stale_threshold" ] && [ "$has_stale" -eq 0 ]; then
+                echo "  Labeling $ORG_NAME/$repo#$number as stale (inactive ${age_days}d): $title"
+
+                gh issue edit "$number" \
+                  --repo "$ORG_NAME/$repo" \
+                  --add-label "$STALE_LABEL" 2>/dev/null || echo "  Warning: could not add stale label"
+
+                gh issue comment "$number" \
+                  --repo "$ORG_NAME/$repo" \
+                  --body "This issue has been automatically labeled as \`stale\` due to ${age_days} days of inactivity.
+
+          It will be closed in $((CLOSE_DAYS - STALE_DAYS)) days if there is no further activity. To keep this issue open, add the \`${KEEP_OPEN_LABEL}\` label or leave a comment." 2>/dev/null || true
+
+                total_labeled=$((total_labeled + 1))
+                summary="$summary\n- STALE $ORG_NAME/$repo#$number (${age_days}d inactive): $title"
+
+                # Rate-limit guard
+                sleep 1
+              fi
+            done
+          done
+
+          echo ""
+          echo "=== Stale Issue Summary ==="
+          echo "Issues labeled as stale: $total_labeled"
+          echo "Issues closed: $total_closed"
+          if [ -n "$summary" ]; then
+            echo -e "$summary"
+          else
+            echo "No stale issues found."
+          fi

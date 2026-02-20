@@ -1,0 +1,305 @@
+name: Issue Triage
+
+on:
+  schedule:
+    # Run daily at 6:00 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ORG_NAME: corvid-agent
+
+jobs:
+  triage:
+    name: List open issues across org
+    runs-on: ubuntu-latest
+    outputs:
+      issues_json: ${{ steps.fetch.outputs.issues_json }}
+      issue_count: ${{ steps.fetch.outputs.issue_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch all open issues across org repos
+        id: fetch
+        run: |
+          echo "Fetching open issues across $ORG_NAME org..."
+
+          # List all non-archived repos in the org
+          repos=$(gh repo list "$ORG_NAME" --no-archived --json name -q '.[].name' --limit 200)
+
+          all_issues="[]"
+
+          for repo in $repos; do
+            echo "Checking $ORG_NAME/$repo..."
+
+            # Rate-limit guard: sleep briefly between API calls
+            sleep 0.5
+
+            issues=$(gh issue list \
+              --repo "$ORG_NAME/$repo" \
+              --state open \
+              --json number,title,body,labels,assignees,createdAt,updatedAt,url \
+              --limit 100 2>/dev/null || echo "[]")
+
+            # Tag each issue with its repo name
+            issues=$(echo "$issues" | jq --arg repo "$repo" '[.[] | . + {repo: $repo}]')
+
+            all_issues=$(echo "$all_issues" "$issues" | jq -s '.[0] + .[1]')
+          done
+
+          issue_count=$(echo "$all_issues" | jq 'length')
+          echo "Found $issue_count open issues across org"
+
+          # Write to file to avoid shell escaping issues with output
+          echo "$all_issues" > /tmp/all_issues.json
+          echo "issues_json<<ISSUES_EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/all_issues.json >> "$GITHUB_OUTPUT"
+          echo "ISSUES_EOF" >> "$GITHUB_OUTPUT"
+          echo "issue_count=$issue_count" >> "$GITHUB_OUTPUT"
+
+  label:
+    name: Auto-label issues by keywords
+    runs-on: ubuntu-latest
+    needs: triage
+    if: needs.triage.outputs.issue_count > 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply keyword-based labels
+        run: |
+          echo '${{ needs.triage.outputs.issues_json }}' > /tmp/all_issues.json
+
+          # Define keyword-to-label mappings
+          declare -A LABEL_MAP
+          LABEL_MAP=(
+            ["bug"]="bug"
+            ["error"]="bug"
+            ["broken"]="bug"
+            ["crash"]="bug"
+            ["fix"]="bug"
+            ["fail"]="bug"
+            ["feature"]="enhancement"
+            ["enhance"]="enhancement"
+            ["request"]="enhancement"
+            ["add support"]="enhancement"
+            ["improve"]="enhancement"
+            ["doc"]="documentation"
+            ["readme"]="documentation"
+            ["typo"]="documentation"
+            ["spelling"]="documentation"
+            ["comment"]="documentation"
+            ["accessibility"]="accessibility"
+            ["a11y"]="accessibility"
+            ["aria"]="accessibility"
+            ["screen reader"]="accessibility"
+            ["keyboard nav"]="accessibility"
+            ["contrast"]="accessibility"
+            ["test"]="testing"
+            ["spec"]="testing"
+            ["coverage"]="testing"
+            ["ci"]="testing"
+            ["flaky"]="testing"
+            ["performance"]="performance"
+            ["slow"]="performance"
+            ["memory"]="performance"
+            ["optimize"]="performance"
+            ["security"]="security"
+            ["vulnerability"]="security"
+            ["cve"]="security"
+            ["dependency"]="dependencies"
+            ["upgrade"]="dependencies"
+            ["bump"]="dependencies"
+            ["outdated"]="dependencies"
+          )
+
+          summary=""
+          labels_added=0
+
+          # Process each issue
+          issue_count=$(jq 'length' /tmp/all_issues.json)
+          for i in $(seq 0 $((issue_count - 1))); do
+            issue=$(jq ".[$i]" /tmp/all_issues.json)
+            repo=$(echo "$issue" | jq -r '.repo')
+            number=$(echo "$issue" | jq -r '.number')
+            title=$(echo "$issue" | jq -r '.title' | tr '[:upper:]' '[:lower:]')
+            body=$(echo "$issue" | jq -r '.body // ""' | tr '[:upper:]' '[:lower:]')
+            existing_labels=$(echo "$issue" | jq -r '[.labels[].name] | join(",")')
+
+            text="$title $body"
+            new_labels=()
+
+            for keyword in "${!LABEL_MAP[@]}"; do
+              label="${LABEL_MAP[$keyword]}"
+              if echo "$text" | grep -qi "$keyword"; then
+                # Skip if label already exists on the issue
+                if ! echo "$existing_labels" | grep -qi "$label"; then
+                  # Avoid duplicates in new_labels
+                  if [[ ! " ${new_labels[*]} " =~ " ${label} " ]]; then
+                    new_labels+=("$label")
+                  fi
+                fi
+              fi
+            done
+
+            if [ ${#new_labels[@]} -gt 0 ]; then
+              for label in "${new_labels[@]}"; do
+                echo "Adding label '$label' to $ORG_NAME/$repo#$number"
+                gh issue edit "$number" \
+                  --repo "$ORG_NAME/$repo" \
+                  --add-label "$label" 2>/dev/null || echo "  Warning: could not add label '$label' (may not exist in repo)"
+                labels_added=$((labels_added + 1))
+                # Rate-limit guard
+                sleep 0.5
+              done
+              summary="$summary\n- $ORG_NAME/$repo#$number: added [${new_labels[*]}]"
+            fi
+          done
+
+          echo ""
+          echo "=== Label Summary ==="
+          echo "Total labels added: $labels_added"
+          if [ -n "$summary" ]; then
+            echo -e "$summary"
+          else
+            echo "No new labels needed."
+          fi
+
+  prioritize:
+    name: Add priority labels by age
+    runs-on: ubuntu-latest
+    needs: triage
+    if: needs.triage.outputs.issue_count > 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply age-based priority labels
+        run: |
+          echo '${{ needs.triage.outputs.issues_json }}' > /tmp/all_issues.json
+
+          now=$(date +%s)
+          summary=""
+          priorities_set=0
+
+          issue_count=$(jq 'length' /tmp/all_issues.json)
+          for i in $(seq 0 $((issue_count - 1))); do
+            issue=$(jq ".[$i]" /tmp/all_issues.json)
+            repo=$(echo "$issue" | jq -r '.repo')
+            number=$(echo "$issue" | jq -r '.number')
+            created_at=$(echo "$issue" | jq -r '.createdAt')
+            existing_labels=$(echo "$issue" | jq -r '[.labels[].name] | join(",")')
+
+            # Skip issues that already have a priority label
+            if echo "$existing_labels" | grep -qiE "priority-(high|medium|low)"; then
+              continue
+            fi
+
+            # Calculate age in days
+            created_epoch=$(date -d "$created_at" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$created_at" +%s 2>/dev/null || echo "0")
+            if [ "$created_epoch" = "0" ]; then
+              echo "Warning: could not parse date for $ORG_NAME/$repo#$number, skipping"
+              continue
+            fi
+
+            age_days=$(( (now - created_epoch) / 86400 ))
+
+            if [ "$age_days" -gt 30 ]; then
+              priority="priority-high"
+            elif [ "$age_days" -gt 7 ]; then
+              priority="priority-medium"
+            else
+              priority="priority-low"
+            fi
+
+            echo "Setting $priority on $ORG_NAME/$repo#$number (age: ${age_days}d)"
+            gh issue edit "$number" \
+              --repo "$ORG_NAME/$repo" \
+              --add-label "$priority" 2>/dev/null || echo "  Warning: could not add label '$priority' (may not exist in repo)"
+            priorities_set=$((priorities_set + 1))
+
+            # Rate-limit guard
+            sleep 0.5
+
+            summary="$summary\n- $ORG_NAME/$repo#$number: $priority (${age_days} days old)"
+          done
+
+          echo ""
+          echo "=== Priority Summary ==="
+          echo "Total priorities set: $priorities_set"
+          if [ -n "$summary" ]; then
+            echo -e "$summary"
+          else
+            echo "No priority labels needed."
+          fi
+
+  assign:
+    name: Auto-assign unassigned issues
+    runs-on: ubuntu-latest
+    needs: [triage, label, prioritize]
+    if: needs.triage.outputs.issue_count > 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assign corvid-agent bot to unassigned issues
+        run: |
+          echo '${{ needs.triage.outputs.issues_json }}' > /tmp/all_issues.json
+
+          bot_user="corvid-agent"
+          summary=""
+          assigned_count=0
+
+          issue_count=$(jq 'length' /tmp/all_issues.json)
+          for i in $(seq 0 $((issue_count - 1))); do
+            issue=$(jq ".[$i]" /tmp/all_issues.json)
+            repo=$(echo "$issue" | jq -r '.repo')
+            number=$(echo "$issue" | jq -r '.number')
+            assignee_count=$(echo "$issue" | jq '.assignees | length')
+
+            # Only assign if issue has no assignees
+            if [ "$assignee_count" -eq 0 ]; then
+              echo "Assigning $bot_user to $ORG_NAME/$repo#$number"
+              gh issue edit "$number" \
+                --repo "$ORG_NAME/$repo" \
+                --add-assignee "$bot_user" 2>/dev/null || echo "  Warning: could not assign $bot_user"
+              assigned_count=$((assigned_count + 1))
+
+              # Rate-limit guard
+              sleep 0.5
+
+              summary="$summary\n- $ORG_NAME/$repo#$number: assigned to $bot_user"
+            fi
+          done
+
+          echo ""
+          echo "=== Assignment Summary ==="
+          echo "Total issues assigned: $assigned_count"
+          if [ -n "$summary" ]; then
+            echo -e "$summary"
+          else
+            echo "All issues already have assignees."
+          fi
+
+  summary:
+    name: Log triage summary
+    runs-on: ubuntu-latest
+    needs: [triage, label, prioritize, assign]
+    if: always()
+    steps:
+      - name: Print triage summary
+        run: |
+          echo "=== Issue Triage Complete ==="
+          echo "Total open issues found: ${{ needs.triage.outputs.issue_count }}"
+          echo "Triage job: ${{ needs.triage.result }}"
+          echo "Label job: ${{ needs.label.result }}"
+          echo "Prioritize job: ${{ needs.prioritize.result }}"
+          echo "Assign job: ${{ needs.assign.result }}"
+          echo ""
+          echo "Next scheduled run: tomorrow at 06:00 UTC"
