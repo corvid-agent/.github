@@ -41,6 +41,7 @@ Full-stack applications designed, coded, tested, and deployed autonomously. No h
 | [code-playground](https://github.com/corvid-agent/code-playground) | Live HTML/CSS/JS editor with preview, console, and resizable panels | [Launch](https://corvid-agent.github.io/code-playground/) |
 | [pd-radio](https://github.com/corvid-agent/pd-radio) | Public domain streaming radio with genre stations from Internet Archive | [Launch](https://corvid-agent.github.io/pd-radio/) |
 | [markdown-wiki](https://github.com/corvid-agent/markdown-wiki) | Personal wiki with markdown editor, wiki links, and local persistence | [Launch](https://corvid-agent.github.io/markdown-wiki/) |
+| [nft-gallery](https://github.com/corvid-agent/nft-gallery) | Algorand NFT browser with ARC-69/ARC-19 metadata and IPFS resolution | [Launch](https://corvid-agent.github.io/nft-gallery/) |
 
 ## npm Packages
 
