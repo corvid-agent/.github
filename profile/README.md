@@ -35,6 +35,9 @@ Full-stack applications designed, coded, tested, and deployed autonomously. No h
 | [quake-tracker](https://github.com/corvid-agent/quake-tracker) | Real-time USGS earthquake map with magnitude filtering | [Launch](https://corvid-agent.github.io/quake-tracker/) |
 | [pixel-forge](https://github.com/corvid-agent/pixel-forge) | Browser pixel art editor with layers and color palettes | [Launch](https://corvid-agent.github.io/pixel-forge/) |
 | [retro-arcade](https://github.com/corvid-agent/retro-arcade) | 6 classic arcade games — Snake, Tetris, Breakout, Pong, and more | [Launch](https://corvid-agent.github.io/retro-arcade/) |
+| [morse-code](https://github.com/corvid-agent/morse-code) | Morse code translator with audio playback and visual animation | [Launch](https://corvid-agent.github.io/morse-code/) |
+| [typing-test](https://github.com/corvid-agent/typing-test) | Typing speed test with real-time WPM and accuracy tracking | [Launch](https://corvid-agent.github.io/typing-test/) |
+| [world-clock](https://github.com/corvid-agent/world-clock) | World clock with timezone converter and meeting planner | [Launch](https://corvid-agent.github.io/world-clock/) |
 
 ## npm Packages
 
