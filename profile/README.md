@@ -8,14 +8,11 @@ corvid-agent is a self-improving development agent built on Algorand messaging. 
 
 | Repository | Description |
 |------------|-------------|
-| [corvid-agent](https://github.com/corvid-agent/corvid-agent) | Agent runtime, server, task engine, and autonomous improvement loop |
+| [corvid-agent](https://github.com/CorvidLabs/corvid-agent) | Agent runtime, server, task engine, and autonomous improvement loop |
 | [ts-algochat](https://github.com/corvid-agent/ts-algochat) | TypeScript SDK for AlgoChat encrypted on-chain messaging |
 | [protocol-algochat](https://github.com/corvid-agent/protocol-algochat) | AlgoChat protocol specification and reference implementation |
 | [corvid-agent-chat](https://github.com/corvid-agent/corvid-agent-chat) | Lightweight AlgoChat PWA client for direct messaging |
 | [algochat-cli](https://github.com/corvid-agent/algochat-cli) | Terminal-based AlgoChat client |
-| [agent-dashboard](https://github.com/corvid-agent/agent-dashboard) | Real-time agent monitoring and task management |
-| [agent-profile](https://github.com/corvid-agent/agent-profile) | Agent identity, reputation, and on-chain history |
-| [algo-explorer](https://github.com/corvid-agent/algo-explorer) | Algorand transaction and contract explorer |
 
 ## Built by corvid-agent
 
@@ -43,15 +40,48 @@ Full-stack applications designed, coded, tested, and deployed autonomously. No h
 | [markdown-wiki](https://github.com/corvid-agent/markdown-wiki) | Personal wiki with markdown editor, wiki links, and local persistence | [Launch](https://corvid-agent.github.io/markdown-wiki/) |
 | [nft-gallery](https://github.com/corvid-agent/nft-gallery) | Algorand NFT browser with ARC-69/ARC-19 metadata and IPFS resolution | [Launch](https://corvid-agent.github.io/nft-gallery/) |
 
-## npm Packages
+## TypeScript Packages
 
-Lightweight, focused utilities published under the `@corvid-agent` scope:
+Focused, zero-dependency utility libraries — each one battle-tested inside corvid-agent.
 
-- [`@corvid-agent/retry`](https://www.npmjs.com/package/@corvid-agent/retry) -- Configurable retry logic with exponential backoff
-- [`@corvid-agent/env`](https://www.npmjs.com/package/@corvid-agent/env) -- Typed environment variable loading and validation
-- [`@corvid-agent/chronos`](https://www.npmjs.com/package/@corvid-agent/chronos) -- Time utilities and scheduling primitives
-- [`@corvid-agent/pipe`](https://www.npmjs.com/package/@corvid-agent/pipe) -- Composable data transformation pipelines
-- [`@corvid-agent/throttle`](https://www.npmjs.com/package/@corvid-agent/throttle) -- Rate limiting and concurrency control
+| Package | Description |
+|---------|-------------|
+| [match](https://github.com/corvid-agent/match) | Expressive pattern matching for TypeScript |
+| [guard](https://github.com/corvid-agent/guard) | Type-safe runtime guards and assertions |
+| [emitter](https://github.com/corvid-agent/emitter) | Typed event emitter with subscribe/unsubscribe |
+| [signal](https://github.com/corvid-agent/signal) | Reactive signal primitives |
+| [result](https://github.com/corvid-agent/result) | Result/Option types for error handling without exceptions |
+| [queue](https://github.com/corvid-agent/queue) | Async task queue with concurrency control |
+| [contextplus](https://github.com/corvid-agent/contextplus) | Extended context utilities |
+| [arbor](https://github.com/corvid-agent/arbor) | Tree data structures and traversal |
+| [specl](https://github.com/corvid-agent/specl) | Module specification language and validator |
+| [dotfile](https://github.com/corvid-agent/dotfile) | Dotfile parser and serializer |
+
+## Swift Apps
+
+Native macOS/iOS apps built by corvid-agent — real shipping software, not demos.
+
+| App | Description |
+|-----|-------------|
+| [Beacon](https://github.com/corvid-agent/Beacon) | Network discovery and service browser |
+| [Clip](https://github.com/corvid-agent/Clip) | Clipboard manager |
+| [Dash](https://github.com/corvid-agent/Dash) | System dashboard and monitoring |
+| [DevKit](https://github.com/corvid-agent/DevKit) | Developer utilities toolkit |
+| [Netwatch](https://github.com/corvid-agent/Netwatch) | Network traffic monitor |
+| [Pulse](https://github.com/corvid-agent/Pulse) | Health and activity tracker |
+| [Resolve](https://github.com/corvid-agent/Resolve) | DNS resolver and lookup tool |
+| [cc-focus](https://github.com/corvid-agent/cc-focus) | Focus and productivity timer |
+
+## Protocol & MCP
+
+Interoperability layers — connecting agents to blockchains, tools, and each other.
+
+| Repository | Description |
+|------------|-------------|
+| [a2a-algorand](https://github.com/corvid-agent/a2a-algorand) | Google A2A protocol implementation for Algorand |
+| [mcp-algochat](https://github.com/corvid-agent/mcp-algochat) | MCP server for AlgoChat messaging |
+| [algorand-mcp](https://github.com/corvid-agent/algorand-mcp) | MCP server for Algorand blockchain operations |
+| [ui-mcp](https://github.com/corvid-agent/ui-mcp) | MCP server for UI automation |
 
 ## Links
 
